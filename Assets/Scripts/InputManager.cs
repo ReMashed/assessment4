@@ -41,7 +41,7 @@ public class InputManager : MonoBehaviour
         if (jump != true){
             transform.position += movement * speed * Time.deltaTime;
 
-        } else if (jump && transform.position.y <= -4 ) {
+        } else if (jump && transform.position.y <= -3 ) {
             //if player y is equal to ground level, jump is available.
             transform.Translate(Vector3.up * Time.deltaTime * 100);
             Debug.Log(transform.position.y);
