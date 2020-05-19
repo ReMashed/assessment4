@@ -6,13 +6,14 @@ public class InputManager : MonoBehaviour
 {
     private Vector3 movement; //2D so ignore z axis
     private bool jump;
-    
+
     public float speed = 3f; 
+    public Rigidbody2D rb; 
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -43,8 +44,9 @@ public class InputManager : MonoBehaviour
 
         } else if (jump && transform.position.y <= -3 ) {
             //if player y is equal to ground level, jump is available.
-            transform.Translate(Vector3.up * Time.deltaTime * 100);
+            //transform.Translate(Vector3.up * Time.deltaTime * 100);
             Debug.Log(transform.position.y);
+            rb.velocity = new Vector3(0, 7, 0);
         }
     }
 
@@ -56,13 +58,15 @@ public class InputManager : MonoBehaviour
                 if (movement.x > 0) //if player is going right (position)
                 {
                     //transform.LookAt(Vector3.right);
+                    //up direction is y axis hence vector3.up
                     gameObject.transform.rotation = Quaternion.LookRotation(new Vector3(0,0, movement.x), Vector3.up);
                
                 } else if (movement.x < 0) //if player is going left 
                 {   
                     //transform.LookAt(Vector3.left);
-                    gameObject.transform.rotation = Quaternion.LookRotation(new Vector3(0,0, movement.x),  Vector3.up);
+                    gameObject.transform.rotation = Quaternion.LookRotation(new Vector3(0,0,movement.x ),  Vector3.up);
                 }
+                    
                 
             } 
     }
