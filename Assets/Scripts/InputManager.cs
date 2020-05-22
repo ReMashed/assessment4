@@ -9,11 +9,13 @@ public class InputManager : MonoBehaviour
 
     public float speed = 3f; 
     public Rigidbody2D rb; 
-
+    //Animations will probs go in seperate script later
+    public Animator animator; 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        animator = GetComponent<Animator>(); 
     }
 
     // Update is called once per frame
@@ -22,6 +24,7 @@ public class InputManager : MonoBehaviour
         GetMovementInput();
         MoveObject(); 
         Rotate();
+       
     }
 
     void GetMovementInput(){
@@ -41,20 +44,22 @@ public class InputManager : MonoBehaviour
         //time.delta makes this framerate independent 
         if (jump != true){
             transform.position += movement * speed * Time.deltaTime;
-
-        } else if (jump && transform.position.y <= -3 ) {
+            
+        }else if (jump && transform.position.y <= 2 ) {
             //if player y is equal to ground level, jump is available.
             //transform.Translate(Vector3.up * Time.deltaTime * 100);
-            Debug.Log(transform.position.y);
+            //Debug.Log(transform.position.y);
+            animator.SetTrigger("Jump");
             rb.velocity = new Vector3(0, 7, 0);
-        }
+        } 
     }
 
     void Rotate(){
         //player is moving right
         if (movement.x != 0)
             {
-                Debug.Log(movement.x);
+                //Debug.Log(movement.x);
+                animator.SetTrigger("Run"); //trigger running animation. 
                 if (movement.x > 0) //if player is going right (position)
                 {
                     //transform.LookAt(Vector3.right);
@@ -69,5 +74,11 @@ public class InputManager : MonoBehaviour
                     
                 
             } 
+            else
+            {
+                //when player stops moving set back to idle
+                Debug.Log(movement.x);
+                animator.SetTrigger("Idle");
+            }
     }
 }
