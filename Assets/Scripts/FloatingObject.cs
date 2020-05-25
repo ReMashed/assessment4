@@ -5,8 +5,8 @@ using UnityEngine;
 public class FloatingObject : MonoBehaviour
 {   
     private float yPos;
-
-    public Vector3 vec;
+    private Vector3 vec;
+    
     // Start is called before the first frame update
     void Start()
     {
