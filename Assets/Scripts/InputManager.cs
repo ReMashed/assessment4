@@ -7,7 +7,7 @@ public class InputManager : MonoBehaviour
     private Vector3 movement; //2D so ignore z axis
     private bool jump;
     private RaycastHit2D hit; 
-    private bool canDoubleJump = false; 
+    //private bool canDoubleJump = false; 
 
     public float speed = 3f; 
     public Rigidbody2D rb; 
@@ -57,15 +57,15 @@ public class InputManager : MonoBehaviour
             animator.SetTrigger("Jump");
             //if touching ground. 
             if (hit.distance < 0.6) {
-                rb.velocity = new Vector2(0, 7);
-                canDoubleJump = true; 
-            } 
+                rb.velocity = new Vector2(0, 6);
+                //canDoubleJump = true; 
+            } /*
             else {
                 if (canDoubleJump) {
                 canDoubleJump = false; 
                 rb.velocity = new Vector2(0, 7);
                  } 
-            }
+            } */
             
         } else {
             //when player stops moving set back to idle

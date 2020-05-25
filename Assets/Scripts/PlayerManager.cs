@@ -27,13 +27,18 @@ public class PlayerManager : MonoBehaviour
             Debug.Log("touch");
             health += 20; 
             Debug.Log(health + "health");
-
-
         }
         if (other.gameObject.name == "SpeedBoost") {
             //gameObject.GetComponent<InputManager>().speed = gameObject.GetComponent<InputManager>().speed*2;
             gameObject.GetComponent<InputManager>().rb.velocity = new Vector2(6,0);
             Destroy(other.gameObject); 
+        }
+        
+    }
+
+    void OnCollisionEnter2D(Collision2D other) {
+        if (other.gameObject.tag == "Enemy"){
+            print("touched enemy"); 
         }
     }
 }
