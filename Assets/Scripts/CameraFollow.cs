@@ -11,7 +11,7 @@ public class CameraFollow : MonoBehaviour
         GetComponent<UnityEngine.Camera>().orthographicSize = (2.687657f); //based on inspector value
     } 
 
-    void FixedUpdate() {
+    void Update() {
         //transform is the object that the script is attached to.
         //thus itll follow player position 
         transform.position = new Vector3(player.position.x, player.position.y + 1.3298722f, transform.position.z);

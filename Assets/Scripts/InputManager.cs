@@ -8,21 +8,34 @@ public class InputManager : MonoBehaviour
     private bool jump;
     private RaycastHit2D hit; 
     //private bool canDoubleJump = false; 
+    private bool started = false; 
 
     public float speed = 3f; 
     public Rigidbody2D rb; 
     public Animator animator; //Animations will probs go in seperate script later
+    public LevelManager scManager; 
     
     // Start is called before the first frame update
     void Start()
-    {
+    {   
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>(); 
+        scManager = GetComponent<LevelManager>();
+        Time.timeScale = 0.0f; 
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {   
+        //When player moves unpause game
+        if (Input.GetButtonDown("Horizontal") && started == false) {
+            Time.timeScale = 1.0f;
+            started = true; 
+        }
+
+        if (Input.GetKeyDown(KeyCode.R) && Time.timeScale == 0) {
+            scManager.LoadA(0);
+        }
         hit = Physics2D.Raycast(transform.position, -Vector2.up, 10);
         //Debug.Log(hit.distance + "distance from collider");
         //Debug.DrawRay(transform.position, dwn*10, Color.red, 0.5f);
@@ -31,7 +44,6 @@ public class InputManager : MonoBehaviour
         GetMovementInput();
         MoveObject(); 
         Rotate();
-       
     }
 
     void GetMovementInput(){
@@ -53,11 +65,13 @@ public class InputManager : MonoBehaviour
         if (!(jump) && movement.x != 0){
             transform.position += movement * speed * Time.deltaTime;
             animator.SetTrigger("Run"); //trigger running animation.
-        } else if (jump ) {
-            animator.SetTrigger("Jump");
+        } else if (jump) {
+            if (hit.distance > 0.5) {
+                animator.SetTrigger("Jump");
+            }
             //if touching ground. 
             if (hit.distance < 0.6) {
-                rb.velocity = new Vector2(0, 6);
+                rb.velocity = new Vector2(0, 7);
                 //canDoubleJump = true; 
             } /*
             else {

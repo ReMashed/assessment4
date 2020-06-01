@@ -22,4 +22,6 @@ public class FloatingObject : MonoBehaviour
         transform.position = vec; 
         //https://answers.unity.com/questions/59934/how-to-an-object-floating-up-and-down.html
     }
+
+    
 }

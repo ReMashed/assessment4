@@ -8,21 +8,23 @@ public class PlayerManager : MonoBehaviour
     // Start is called before the first frame update
     private float health = 101; 
     public Text healthText; 
-    public Text instructionText; 
-    //public GameObject Obj;
+    public Text instructionText;
+    public GameObject speedObj;
+
+    //public SpeedBoost Obj;
     void Start()
     {
-        
+       
     }
 
     // Update is called once per frame
     void Update()
-    {
+    {  
         if(health > 101) {
             health = 101;
         } else if (health < 1) {
             Time.timeScale = 0f; 
-            instructionText.text = "Game Over";
+            instructionText.text = "Game Over \n Press R to restart";
         }
         health -= Time.deltaTime;
         healthText.text = "Health: " + (int)health; 
@@ -43,21 +45,26 @@ public class PlayerManager : MonoBehaviour
             health += 20; 
             Debug.Log(health + "health");
         }
-        if (other.gameObject.name == "SpeedBoost") {
+        if (other.gameObject.name == "SpeedBoost" ||other.gameObject.name == "SpeedBoost(Clone)") {
             instructionText.text = "Avoid the enemy or lose hp!";
             //gameObject.GetComponent<InputManager>().speed = gameObject.GetComponent<InputManager>().speed*2;
-            gameObject.GetComponent<InputManager>().rb.velocity = new Vector2(6,0);
+            Vector2 playerCurrentVel = new Vector2(); 
+            playerCurrentVel = gameObject.GetComponent<InputManager>().rb.velocity;
+            //get direction of player so they can boost left or right. 
+            gameObject.GetComponent<InputManager>().rb.velocity = new Vector2(Input.GetAxis("Horizontal")*6, 1);
+            StartCoroutine(RespawnObject(speedObj));
             Destroy(other.gameObject); 
+            //other.gameObject.GetComponent<Renderer>().enabled = false; //remove object; really just rendering
+           
         }
         if (other.gameObject.name == "Step1") {
             instructionText.text = "Jump over objects with the arrow using W or Up Arrow key!";
-            
         }
         if (other.gameObject.name == "Arrow") {
             instructionText.text = "Touch the Coffee Bean to recover your Health!";
         }
         if (other.gameObject.name == "CoffeeCup") {
-            instructionText.text = "You win!";
+            instructionText.text = "You win! \n Press R to restart";
             Time.timeScale = 0f; //freeze time so game wont run. 
         }
         
@@ -69,4 +76,13 @@ public class PlayerManager : MonoBehaviour
             print("touched enemy"); 
         }
     }
+    //coroutine 
+    IEnumerator RespawnObject(GameObject gameObject){
+        yield return new WaitForSeconds(5);
+        GameObject newObj = Instantiate(gameObject);
+
+    
+    }
+
+    
 }
