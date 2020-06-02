@@ -64,12 +64,12 @@ public class InputManager : MonoBehaviour
                 
         if (!(jump) && movement.x != 0){
             transform.position += movement * speed * Time.deltaTime;
+            //if (hit.distance < 0.6){
             animator.SetTrigger("Run"); //trigger running animation.
+            //}
         } else if (jump) {
-            if (hit.distance > 0.5) {
-                animator.SetTrigger("Jump");
-            }
             //if touching ground. 
+            animator.SetTrigger("Jump");
             if (hit.distance < 0.6) {
                 rb.velocity = new Vector2(0, 7);
                 //canDoubleJump = true; 

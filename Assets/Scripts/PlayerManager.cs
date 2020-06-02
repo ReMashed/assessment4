@@ -51,7 +51,9 @@ public class PlayerManager : MonoBehaviour
             Vector2 playerCurrentVel = new Vector2(); 
             playerCurrentVel = gameObject.GetComponent<InputManager>().rb.velocity;
             //get direction of player so they can boost left or right. 
-            gameObject.GetComponent<InputManager>().rb.velocity = new Vector2(Input.GetAxis("Horizontal")*6, 1);
+            //gameObject.GetComponent<InputManager>().rb.velocity = new Vector2(Input.GetAxis("Horizontal")*6, 1);
+            gameObject.GetComponent<InputManager>().speed = 6; //increase speed 
+            StartCoroutine(speedReset());
             StartCoroutine(RespawnObject(speedObj));
             Destroy(other.gameObject); 
             //other.gameObject.GetComponent<Renderer>().enabled = false; //remove object; really just rendering
@@ -80,8 +82,11 @@ public class PlayerManager : MonoBehaviour
     IEnumerator RespawnObject(GameObject gameObject){
         yield return new WaitForSeconds(5);
         GameObject newObj = Instantiate(gameObject);
+    }
 
-    
+    IEnumerator speedReset(){
+        yield return new WaitForSeconds(3);
+        gameObject.GetComponent<InputManager>().speed = 3f;
     }
 
     
