@@ -117,8 +117,13 @@ public class InputManager : MonoBehaviour
         if (attack){
                 animator.SetTrigger("Attack");
                 gameObject.GetComponent<PlayerManager>().swordCollider.enabled = true; 
+                gameObject.GetComponent<PlayerManager>().energy -= 10;  
             } else {
-                gameObject.GetComponent<PlayerManager>().swordCollider.enabled = false; 
+
+                if(animator.GetCurrentAnimatorStateInfo(0).length > animator.GetCurrentAnimatorStateInfo(0).normalizedTime && !animator.IsInTransition(0)) {
+                    //gameObject.GetComponent<PlayerManager>().swordCollider.enabled = false; 
+                }
+                
                 
                 
             }

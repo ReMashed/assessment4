@@ -6,8 +6,8 @@ using UnityEngine.UI;
 public class PlayerManager : MonoBehaviour
 {
     // Start is called before the first frame update
-    private float health = 101; 
-    public Text healthText; 
+    public float energy = 101; 
+    public Text energyText; 
     public Text instructionText;
     public GameObject speedObj;
 
@@ -24,14 +24,21 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {  
-        if(health > 101) {
-            health = 101;
-        } else if (health < 1) {
+        if(energy > 101) {
+            energy = 101;
+        } else if (energy < 1) {
+            gameObject.GetComponent<Animator>().SetTrigger("Death");
             Time.timeScale = 0f; 
             instructionText.text = "Game Over \n Press R to restart";
+            
         }
-        health -= Time.deltaTime;
-        healthText.text = "Health: " + (int)health; 
+
+        energy -= Time.deltaTime;
+        energyText.text = "Energy: " + (int)energy; 
+
+        if (energy < 0) {
+            energyText.text = "Energy: 0"; 
+        }
     }
     //script is attached to player, so whatever it touches
     void OnTriggerEnter2D(Collider2D other) { 
@@ -42,12 +49,12 @@ public class PlayerManager : MonoBehaviour
             Destroy(other.gameObject);
             //If the GameObject has the same tag as specified, output this message in the console
             //Debug.Log("touch");
-            health += 20; 
-            Debug.Log(health + "health");
+            energy += 20; 
+            Debug.Log(energy + "Energy");
         } else if (other.gameObject.name == "HealthBoost_2") {
             Destroy(other.gameObject);
-            health += 20; 
-            Debug.Log(health + "health");
+            energy += 20; 
+            Debug.Log(energy + "Energy");
         }
         if (other.gameObject.name == "SpeedBoost" ||other.gameObject.name == "SpeedBoost(Clone)") {
             instructionText.text = "Avoid the enemy or lose hp!";
@@ -78,7 +85,8 @@ public class PlayerManager : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Enemy"){
-            health -= 1; 
+            gameObject.GetComponent<Animator>().SetTrigger("Hurt");
+            energy -= 20; 
             //print("touched enemy"); 
         }
     }

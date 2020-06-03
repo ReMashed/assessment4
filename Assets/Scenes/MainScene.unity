@@ -319,7 +319,7 @@ GameObject:
   - component: {fileID: 267287054}
   - component: {fileID: 267287053}
   m_Layer: 5
-  m_Name: HealthText
+  m_Name: EnergyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -376,7 +376,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Health: 100'
+  m_Text: 'Energy: 100'
 --- !u!222 &267287054
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -759,7 +759,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db59746ce9a47d46ab5d393633c02d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  healthText: {fileID: 267287053}
+  energyText: {fileID: 267287053}
   instructionText: {fileID: 1080807295}
   speedObj: {fileID: 7767585355465191947, guid: 37d02970b118f01479acb839928326ce,
     type: 3}
@@ -1310,7 +1310,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1620803681}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1

@@ -9,7 +9,7 @@ public class AutoDestroy : MonoBehaviour
     void Start()
     {
         if (this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("DeathAnim")) {
-            Destroy(gameObject, this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length + delay);
+            //Destroy(this, this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).length);
         }
         
     }
