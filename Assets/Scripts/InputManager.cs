@@ -6,9 +6,11 @@ public class InputManager : MonoBehaviour
 {   
     private Vector3 movement; //2D so ignore z axis
     private bool jump;
+    private bool attack; 
     private RaycastHit2D hit; 
     //private bool canDoubleJump = false; 
     private bool started = false; 
+    
 
     public float speed = 3f; 
     public Rigidbody2D rb; 
@@ -46,18 +48,19 @@ public class InputManager : MonoBehaviour
         Rotate();
     }
 
-    void GetMovementInput(){
+    public void GetMovementInput(){
         //continuous values between -1, 1 
         //will need to clamp values for maintain values of 1 when diagonals occur
         movement.x = Input.GetAxis("Horizontal");
         jump = Input.GetButtonDown("Vertical"); //jump should be instant
+        attack = Input.GetKeyDown("space");
         //clamping uneccessary if just horizontal movement
         //movement = Vector3.ClampMagnitude(movement, 1.0f);
         //Debug.Log(movement.sqrMagnitude); 
         //jump = Input.GetButtonDown("Jump");
     }
 
-    void MoveObject(){
+    public void MoveObject(){
         //framerate independent movement (not affected by framerate)
         //transform is object script is attached to
         //time.delta makes this framerate independent
@@ -66,6 +69,8 @@ public class InputManager : MonoBehaviour
             transform.position += movement * speed * Time.deltaTime;
             //if (hit.distance < 0.6){
             animator.SetTrigger("Run"); //trigger running animation.
+            Attack();
+            
             //}
         } else if (jump) {
             //if touching ground. 
@@ -80,15 +85,16 @@ public class InputManager : MonoBehaviour
                 rb.velocity = new Vector2(0, 7);
                  } 
             } */
-            
-        } else {
+        }
+        else {
             //when player stops moving set back to idle
             //Debug.Log(hit.distance);
             animator.SetTrigger("Idle");
+            Attack(); 
             }
     }
 
-    void Rotate(){
+    public void Rotate(){
         //player is moving right
         if (movement.x != 0)
             {
@@ -105,5 +111,18 @@ public class InputManager : MonoBehaviour
                     gameObject.transform.rotation = Quaternion.LookRotation(new Vector3(0,0,movement.x ),  Vector3.up);
                 }     
             } 
+    }
+
+    public void Attack(){
+        if (attack){
+                animator.SetTrigger("Attack");
+                gameObject.GetComponent<PlayerManager>().swordCollider.enabled = true; 
+            } else {
+                gameObject.GetComponent<PlayerManager>().swordCollider.enabled = false; 
+                
+                
+            }
+       
+
     }
 }

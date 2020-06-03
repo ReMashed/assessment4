@@ -7,14 +7,18 @@ public class EnemyManager : MonoBehaviour
     private float xPos;
     private float prevMin; 
     private float prevMax;
-    public Vector3 vec;
+    public float health; 
+    public Animator animator; 
+    private Vector3 vec;
     // Start is called before the first frame update
     void Start()
-    {
+    {   
+        health = 100; 
         vec = transform.position; 
         xPos = vec.x; 
         prevMin = vec.x;
         prevMax = vec.x; 
+        //animator = GetComponent<Animator>(); 
     }
 
     // Update is called once per frame
@@ -44,6 +48,34 @@ public class EnemyManager : MonoBehaviour
             //rb.velocity = -transform.right * 3;
             transform.right = new Vector3(17.26f, -0.2f, 0.0f) - transform.position;
         } 
+        Dead(); 
+    }
+
+    void OnCollisionEnter2D(Collision2D other) {
+        if(other.gameObject.name == "Sword"){
+            health -= 100; 
+            print("hitenter");
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D other) {
+        if(other.gameObject.name == "Sword"){
+            health -= 100; 
+            print("hit");
+        }
+
+    }
+
+    public void Dead(){
+        if (health <= 0) {
+            animator.SetTrigger("Dead");
+            if(animator.GetCurrentAnimatorStateInfo(0).length > animator.GetCurrentAnimatorStateInfo(0).normalizedTime && !animator.IsInTransition(0)){
+                //Destroy(this.gameObject);
+            }
+           //
+           print("enemy 0 health");
+        }
+
     }
   
 }

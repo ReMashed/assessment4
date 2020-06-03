@@ -11,10 +11,14 @@ public class PlayerManager : MonoBehaviour
     public Text instructionText;
     public GameObject speedObj;
 
+    public Collider2D swordCollider; 
+
+
     //public SpeedBoost Obj;
     void Start()
     {
-       
+       //swordCollider = GetComponent<Collider2D>(); 
+    
     }
 
     // Update is called once per frame
@@ -31,7 +35,7 @@ public class PlayerManager : MonoBehaviour
     }
     //script is attached to player, so whatever it touches
     void OnTriggerEnter2D(Collider2D other) { 
-        Debug.Log("touchOther");
+        //Debug.Log("touchOther");
         if (other.gameObject.name == "HealthBoost")
         {
             instructionText.text = "Touch the Lightning for a Speed Boost!";
@@ -48,8 +52,8 @@ public class PlayerManager : MonoBehaviour
         if (other.gameObject.name == "SpeedBoost" ||other.gameObject.name == "SpeedBoost(Clone)") {
             instructionText.text = "Avoid the enemy or lose hp!";
             //gameObject.GetComponent<InputManager>().speed = gameObject.GetComponent<InputManager>().speed*2;
-            Vector2 playerCurrentVel = new Vector2(); 
-            playerCurrentVel = gameObject.GetComponent<InputManager>().rb.velocity;
+            //Vector2 playerCurrentVel = new Vector2(); 
+            //playerCurrentVel = gameObject.GetComponent<InputManager>().rb.velocity;
             //get direction of player so they can boost left or right. 
             //gameObject.GetComponent<InputManager>().rb.velocity = new Vector2(Input.GetAxis("Horizontal")*6, 1);
             gameObject.GetComponent<InputManager>().speed = 6; //increase speed 
@@ -72,10 +76,10 @@ public class PlayerManager : MonoBehaviour
         
     }
 
-    void OnCollisionStay2D(Collision2D other) {
+    void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Enemy"){
-            health-= 1; 
-            print("touched enemy"); 
+            health -= 1; 
+            //print("touched enemy"); 
         }
     }
     //coroutine 
