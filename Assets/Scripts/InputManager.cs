@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System; 
 
 public class InputManager : MonoBehaviour
 {   
@@ -8,22 +9,27 @@ public class InputManager : MonoBehaviour
     private bool jump;
     private bool attack; 
     private RaycastHit2D hit; 
-    //private bool canDoubleJump = false; 
+    private bool canDoubleJump = false;
     private bool started = false; 
     
-
-    public float speed = 3f; 
+    public bool grounded = false; 
+    public bool doubleJumpUnlocked = false; 
+    public float speed ; 
+    public float originalSpeed; 
+    public float originalJump; 
+    public float jumpHeight;
     public Rigidbody2D rb; 
     public Animator animator; //Animations will probs go in seperate script later
     public LevelManager scManager; 
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {   
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>(); 
         scManager = GetComponent<LevelManager>();
         Time.timeScale = 0.0f; 
+        
     }
 
     // Update is called once per frame
@@ -36,12 +42,20 @@ public class InputManager : MonoBehaviour
         }
 
         if (Input.GetKeyDown(KeyCode.R) && Time.timeScale == 0) {
-            scManager.LoadA(0);
+
+            scManager.LoadA(scManager.currentSceneNumber());
+            /*
+            //Keep item boost, but makes enemies respawn and hp reset more annoying.
+            transform.position = gameObject.GetComponent<PlayerManager>().spawn; 
+            gameObject.GetComponent<PlayerManager>().energy = 101; 
+            gameObject.GetComponent<PlayerManager>().uiText.text = "";
+            Time.timeScale = 1.0f;
+            */
         }
         hit = Physics2D.Raycast(transform.position, -Vector2.up, 10);
         //Debug.Log(hit.distance + "distance from collider");
         //Debug.DrawRay(transform.position, dwn*10, Color.red, 0.5f);
-        //Debug.Log("collider hit" + hit.collider);
+        //Debug.Log("collider hit" + hit.collider.tag);
         //Debug.Log(rb.velocity);
         GetMovementInput();
         MoveObject(); 
@@ -64,40 +78,37 @@ public class InputManager : MonoBehaviour
         //framerate independent movement (not affected by framerate)
         //transform is object script is attached to
         //time.delta makes this framerate independent
-                
+        Attack();
         if (!(jump) && movement.x != 0){
             transform.position += movement * speed * Time.deltaTime;
-            //if (hit.distance < 0.6){
             animator.SetTrigger("Run"); //trigger running animation.
-            Attack();
-            
-            //}
-        } else if (jump) {
-            //if touching ground. 
+        
+        } else if (jump && grounded) {
+            //if touching ground.
+            //boolean changed via playermanager.
             animator.SetTrigger("Jump");
-            if (hit.distance < 0.6) {
-                rb.velocity = new Vector2(0, 7);
-                //canDoubleJump = true; 
-            } /*
-            else {
-                if (canDoubleJump) {
+            rb.velocity = new Vector2(0, jumpHeight); 
+            grounded = false; 
+            canDoubleJump = true; 
+            
+                
+            
+        } else if (jump && canDoubleJump && doubleJumpUnlocked) {
                 canDoubleJump = false; 
-                rb.velocity = new Vector2(0, 7);
-                 } 
-            } */
+                rb.velocity = new Vector2(0, jumpHeight);        
         }
         else {
             //when player stops moving set back to idle
             //Debug.Log(hit.distance);
             animator.SetTrigger("Idle");
-            Attack(); 
+            Attack();
+             
             }
     }
 
     public void Rotate(){
         //player is moving right
-        if (movement.x != 0)
-            {
+        if (movement.x != 0){
                 //Debug.Log(movement.x); 
                 if (movement.x > 0) //if player is going right (position)
                 {
@@ -110,14 +121,14 @@ public class InputManager : MonoBehaviour
                     //transform.LookAt(Vector3.left);
                     gameObject.transform.rotation = Quaternion.LookRotation(new Vector3(0,0,movement.x ),  Vector3.up);
                 }     
-            } 
+        } 
     }
 
     public void Attack(){
-        if (attack){
+        if (attack && Time.timeScale != 0.0f){
                 animator.SetTrigger("Attack");
                 gameObject.GetComponent<PlayerManager>().swordCollider.enabled = true; 
-                gameObject.GetComponent<PlayerManager>().energy -= 10;  
+                gameObject.GetComponent<PlayerManager>().energy -= 5;  
             } else {
 
                 if(animator.GetCurrentAnimatorStateInfo(0).length > animator.GetCurrentAnimatorStateInfo(0).normalizedTime && !animator.IsInTransition(0)) {
@@ -130,4 +141,5 @@ public class InputManager : MonoBehaviour
        
 
     }
+
 }

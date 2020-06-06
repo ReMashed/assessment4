@@ -8,6 +8,10 @@ TagManager:
   - Item
   - Enemy
   - Weapon
+  - Background
+  - Bottom
+  - Spike
+  - Health
   layers:
   - Default
   - TransparentFX

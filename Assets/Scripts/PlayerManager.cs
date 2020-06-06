@@ -2,22 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; 
+using TMPro; 
 
 public class PlayerManager : MonoBehaviour
 {
     // Start is called before the first frame update
+
+    public Vector3 spawn; 
     public float energy = 101; 
     public Text energyText; 
-    public Text instructionText;
+    //public Text uiText;
+    public TextMeshProUGUI uiText; 
     public GameObject speedObj;
-
     public Collider2D swordCollider; 
-
 
     //public SpeedBoost Obj;
     void Start()
     {
        //swordCollider = GetComponent<Collider2D>(); 
+       spawn = transform.position; 
     
     }
 
@@ -29,7 +32,7 @@ public class PlayerManager : MonoBehaviour
         } else if (energy < 1) {
             gameObject.GetComponent<Animator>().SetTrigger("Death");
             Time.timeScale = 0f; 
-            instructionText.text = "Game Over \n Press R to restart";
+            uiText.text = "You Died \n Press R to restart level";
             
         }
 
@@ -45,49 +48,93 @@ public class PlayerManager : MonoBehaviour
         //Debug.Log("touchOther");
         if (other.gameObject.name == "HealthBoost")
         {
-            instructionText.text = "Touch the Lightning for a Speed Boost!";
+            if (isScene(0)){
+                uiText.text = "Touch the Lightning for a Speed Boost!";
+            } 
             Destroy(other.gameObject);
             //If the GameObject has the same tag as specified, output this message in the console
             //Debug.Log("touch");
             energy += 20; 
             Debug.Log(energy + "Energy");
-        } else if (other.gameObject.name == "HealthBoost_2") {
+        } else if (other.gameObject.tag == "Health") {
             Destroy(other.gameObject);
-            energy += 20; 
-            Debug.Log(energy + "Energy");
+            energy += 30; 
+            //Debug.Log(energy + "Energy");
         }
         if (other.gameObject.name == "SpeedBoost" ||other.gameObject.name == "SpeedBoost(Clone)") {
-            instructionText.text = "Avoid the enemy or lose hp!";
+            if (isScene(0)){
+                uiText.text = "Avoid the enemy or lose hp!";
+            } 
             //gameObject.GetComponent<InputManager>().speed = gameObject.GetComponent<InputManager>().speed*2;
             //Vector2 playerCurrentVel = new Vector2(); 
             //playerCurrentVel = gameObject.GetComponent<InputManager>().rb.velocity;
             //get direction of player so they can boost left or right. 
             //gameObject.GetComponent<InputManager>().rb.velocity = new Vector2(Input.GetAxis("Horizontal")*6, 1);
-            gameObject.GetComponent<InputManager>().speed = 6; //increase speed 
-            StartCoroutine(speedReset());
+            gameObject.GetComponent<InputManager>().speed = gameObject.GetComponent<InputManager>().speed*2; //increase speed 
+            gameObject.GetComponent<InputManager>().jumpHeight = gameObject.GetComponent<InputManager>().jumpHeight*1.2f;
+            StartCoroutine(SpeedReset());
             StartCoroutine(RespawnObject(speedObj));
+            StartCoroutine(ResetText());
             Destroy(other.gameObject); 
+            uiText.text = "Speed Increase";
+            
             //other.gameObject.GetComponent<Renderer>().enabled = false; //remove object; really just rendering
            
         }
+        if (other.gameObject.tag == "Bottom") {
+            energy -= 100; 
+        }
         if (other.gameObject.name == "Step1") {
-            instructionText.text = "Jump over objects with the arrow using W or Up Arrow key!";
+            uiText.text = "Jump over objects with the arrow using W or Up Arrow key!";
         }
         if (other.gameObject.name == "Arrow") {
-            instructionText.text = "Touch the Coffee Bean to recover your Health!";
+            uiText.text = "Touch the Coffee Bean to recover your Health!";
+        }
+        if (other.gameObject.tag == "Background" || other.gameObject.tag == "Obstacle"){
+            //print("touched Background"+ other.gameObject);
+            gameObject.GetComponent<InputManager>().grounded = true; 
+        }
+        if (other.gameObject.name == "DoubleJump") {
+            gameObject.GetComponent<InputManager>().doubleJumpUnlocked = true; 
+            uiText.text = "Double Jump unlocked";
+            StartCoroutine(ResetText());
+            Destroy(other.gameObject); 
         }
         if (other.gameObject.name == "CoffeeCup") {
-            instructionText.text = "You win! \n Press R to restart";
+            //change this to load next level
+            //via a couroutine 
+            uiText.text = "You win! \n Press R to restart";
             Time.timeScale = 0f; //freeze time so game wont run. 
         }
+        
+
         
     }
 
     void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Enemy"){
             gameObject.GetComponent<Animator>().SetTrigger("Hurt");
-            energy -= 20; 
+            energy -= 10; 
             //print("touched enemy"); 
+        }
+        if (other.gameObject.tag == "Background" || other.gameObject.tag == "Obstacle" ){
+            //print("touched Background"+ other.gameObject);
+            gameObject.GetComponent<InputManager>().grounded = true; 
+        }
+    }
+    /*
+    void OnCollisionStay2D(Collision2D other) {
+        if (other.gameObject.tag == "Background" || other.gameObject.tag == "Obstacle"){
+            //print("touched Background"+ other.gameObject);
+            StartCoroutine(DelayReset());
+        }
+    } */
+
+    private bool isScene(int num){
+        if (gameObject.GetComponent<LevelManager>().currentSceneNumber() == num) {
+            return true; 
+        } else {
+            return false; 
         }
     }
     //coroutine 
@@ -96,9 +143,20 @@ public class PlayerManager : MonoBehaviour
         GameObject newObj = Instantiate(gameObject);
     }
 
-    IEnumerator speedReset(){
+    IEnumerator SpeedReset(){
         yield return new WaitForSeconds(3);
-        gameObject.GetComponent<InputManager>().speed = 3f;
+        gameObject.GetComponent<InputManager>().speed = gameObject.GetComponent<InputManager>().originalSpeed;
+        gameObject.GetComponent<InputManager>().jumpHeight = gameObject.GetComponent<InputManager>().originalJump;
+    }
+
+    IEnumerator ResetText(){
+        yield return new WaitForSeconds(2);
+        uiText.text = "";
+    }
+
+    IEnumerator DelayReset(){
+        yield return new WaitForSeconds(0.1f);
+        gameObject.GetComponent<InputManager>().grounded = true; 
     }
 
     
