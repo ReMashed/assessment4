@@ -15,7 +15,7 @@ public class LevelManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        ExitOnPress();
     }
 
     public void LoadA(int scenenum){
@@ -37,5 +37,23 @@ public class LevelManager : MonoBehaviour
     IEnumerator LoadDelay(int scenenum, float time){
         yield return new WaitForSeconds(time);
         SceneManager.LoadScene(scenenum);
+    }
+
+    public void ExitGame()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false; //used to end game in editor
+#endif
+#if UNITY_STANDALONE
+        Application.Quit(); //forces Unity to be closed, so wouldn't work in editor
+#endif
+    }
+
+    private void ExitOnPress()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            LoadA(0);
+        }
     }
 }

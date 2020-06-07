@@ -51126,6 +51126,8 @@ MonoBehaviour:
   jumpClip: {fileID: 8300000, guid: 0981c7ed88808464394d028720fdb7a4, type: 3}
   deathClip: {fileID: 8300000, guid: 673d9dfa02898b04baae00e70e153157, type: 3}
   boostClip: {fileID: 8300000, guid: f4bc3204d7f9bce4d9dbed20bee6e387, type: 3}
+  winClip: {fileID: 8300000, guid: f80f31be9b7821f4696479c708efc212, type: 3}
+  walkClip: {fileID: 8300000, guid: 063d46886ae1c7843b0cbc46a0a6198c, type: 3}
 --- !u!82 &7501118783489305313
 AudioSource:
   m_ObjectHideFlags: 0

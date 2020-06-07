@@ -9,7 +9,9 @@ public class SoundManager : MonoBehaviour
     public AudioClip hurtClip;
     public AudioClip jumpClip;
     public AudioClip deathClip;
-    public AudioClip boostClip; 
+    public AudioClip boostClip;
+    public AudioClip winClip;  
+    public AudioClip walkClip;  
     // Start is called before the first frame update
     void Start()
     {
@@ -37,4 +39,15 @@ public class SoundManager : MonoBehaviour
         aSource.clip = boostClip;
         aSource.Play();
     }
+
+    public void WinSound(){
+        aSource.clip = winClip;
+        aSource.Play();
+    }
+    public void WalkSound(){
+        aSource.clip = walkClip;
+        aSource.PlayOneShot(walkClip, 0.3f);
+    }
+
+    
 }

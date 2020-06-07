@@ -32,7 +32,6 @@ public class PlayerManager : MonoBehaviour
         } else if (energy < 1) {
             Time.timeScale = 0f; 
             uiText.text = "You Died \n Press R to restart level";
-            
         }
 
         energy -= Time.deltaTime;
@@ -108,7 +107,8 @@ public class PlayerManager : MonoBehaviour
         if (other.gameObject.name == "CoffeeCup") {
             //change this to load next level
             //via a couroutine 
-            uiText.text = "You win! \n Press R to restart";
+            uiText.text = "You win! \n Press ESC to exit";
+            gameObject.GetComponent<SoundManager>().WinSound();
             Time.timeScale = 0f; //freeze time so game wont run. 
         }
         if (other.gameObject.name == "HellPortal") {
@@ -188,6 +188,4 @@ public class PlayerManager : MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         gameObject.GetComponent<InputManager>().grounded = true; 
     }
-
-    
 }

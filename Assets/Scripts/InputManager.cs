@@ -11,7 +11,8 @@ public class InputManager : MonoBehaviour
     private RaycastHit2D hit; 
     private bool canDoubleJump = false;
     private bool started = false; 
-    
+    private float nextFootStep = 0;
+    private float footstepDelay = 0.3f; 
     public bool grounded = false; 
     public bool doubleJumpUnlocked = false; 
     public float speed ; 
@@ -82,6 +83,15 @@ public class InputManager : MonoBehaviour
         if (!(jump) && movement.x != 0){
             transform.position += movement * speed * Time.deltaTime;
             animator.SetTrigger("Run"); //trigger running animation.
+            if(rb.velocity.y == 0){
+                nextFootStep -= Time.deltaTime; 
+                if(nextFootStep <= 0){
+                gameObject.GetComponent<SoundManager>().aSource.PlayOneShot(
+                    gameObject.GetComponent<SoundManager>().walkClip, 0.5f);
+                nextFootStep += footstepDelay; 
+                }
+            }
+            
         
         } else if (jump && grounded) {
             //boolean changed via playermanager.
@@ -133,10 +143,7 @@ public class InputManager : MonoBehaviour
                 gameObject.GetComponent<SoundManager>().AttackSound();
                 gameObject.GetComponent<PlayerManager>().swordCollider.enabled = true; 
                 gameObject.GetComponent<PlayerManager>().energy -= 5;  
-            } else {            
-                
-            }
-       
+            } 
 
     }
 
