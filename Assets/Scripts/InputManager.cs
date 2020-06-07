@@ -84,10 +84,12 @@ public class InputManager : MonoBehaviour
             animator.SetTrigger("Run"); //trigger running animation.
         
         } else if (jump && grounded) {
-            //if touching ground.
             //boolean changed via playermanager.
+            //with addforce height should == 19, with vel == 22; Scene3 only. 
             animator.SetTrigger("Jump");
+            gameObject.GetComponent<SoundManager>().JumpSound();
             rb.velocity = new Vector2(0, jumpHeight); 
+            //rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
             grounded = false; 
             canDoubleJump = true; 
             
@@ -95,6 +97,7 @@ public class InputManager : MonoBehaviour
             
         } else if (jump && canDoubleJump && doubleJumpUnlocked) {
                 canDoubleJump = false; 
+                gameObject.GetComponent<SoundManager>().JumpSound();
                 rb.velocity = new Vector2(0, jumpHeight);        
         }
         else {
@@ -127,15 +130,10 @@ public class InputManager : MonoBehaviour
     public void Attack(){
         if (attack && Time.timeScale != 0.0f){
                 animator.SetTrigger("Attack");
+                gameObject.GetComponent<SoundManager>().AttackSound();
                 gameObject.GetComponent<PlayerManager>().swordCollider.enabled = true; 
                 gameObject.GetComponent<PlayerManager>().energy -= 5;  
-            } else {
-
-                if(animator.GetCurrentAnimatorStateInfo(0).length > animator.GetCurrentAnimatorStateInfo(0).normalizedTime && !animator.IsInTransition(0)) {
-                    //gameObject.GetComponent<PlayerManager>().swordCollider.enabled = false; 
-                }
-                
-                
+            } else {            
                 
             }
        

@@ -60,7 +60,7 @@ public class CameraFollow : MonoBehaviour
         } else if (scene2) {
             transform.position = new Vector3(player.position.x, player.position.y + (transform.position.y - player.position.y), transform.position.z);
         } else if (scene3) {
-            transform.position = new Vector3(player.position.x, player.position.y + yOffset, transform.position.z);
+            transform.position = new Vector3(player.position.x, player.position.y + yOffset , transform.position.z);
         } else if (scene4) {
             transform.position = new Vector3(player.position.x, player.position.y + (transform.position.y - player.position.y), transform.position.z);
         }

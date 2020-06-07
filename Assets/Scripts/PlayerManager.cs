@@ -6,21 +6,21 @@ using TMPro;
 
 public class PlayerManager : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Rigidbody2D rb; 
 
     public Vector3 spawn; 
     public float energy = 101; 
-    public Text energyText; 
-    //public Text uiText;
+    public Text energyText;
     public TextMeshProUGUI uiText; 
     public GameObject speedObj;
-    public Collider2D swordCollider; 
-
-    //public SpeedBoost Obj;
+    public GameObject healthObj;
+    public Collider2D swordCollider;
+    
     void Start()
     {
        //swordCollider = GetComponent<Collider2D>(); 
        spawn = transform.position; 
+       rb = GetComponent<Rigidbody2D>();
     
     }
 
@@ -30,7 +30,6 @@ public class PlayerManager : MonoBehaviour
         if(energy > 101) {
             energy = 101;
         } else if (energy < 1) {
-            gameObject.GetComponent<Animator>().SetTrigger("Death");
             Time.timeScale = 0f; 
             uiText.text = "You Died \n Press R to restart level";
             
@@ -42,6 +41,8 @@ public class PlayerManager : MonoBehaviour
         if (energy < 0) {
             energyText.text = "Energy: 0"; 
         }
+        
+        
     }
     //script is attached to player, so whatever it touches
     void OnTriggerEnter2D(Collider2D other) { 
@@ -59,6 +60,10 @@ public class PlayerManager : MonoBehaviour
         } else if (other.gameObject.tag == "Health") {
             Destroy(other.gameObject);
             energy += 30; 
+            //Respawnable health item
+            if(other.gameObject.name == "HealthBoostRe" || other.gameObject.name == "HealthBoost(Clone)"){
+                StartCoroutine(RespawnObject(healthObj));
+            }
             //Debug.Log(energy + "Energy");
         }
         if (other.gameObject.name == "SpeedBoost" ||other.gameObject.name == "SpeedBoost(Clone)") {
@@ -106,29 +111,54 @@ public class PlayerManager : MonoBehaviour
             uiText.text = "You win! \n Press R to restart";
             Time.timeScale = 0f; //freeze time so game wont run. 
         }
-        
-
-        
+        if (other.gameObject.name == "HellPortal") {
+            //testing.
+            uiText.text = "Gateway to Hell Unlocked";
+            gameObject.GetComponent<LevelManager>().DelayedLoad(0);
+        }
+        if (other.gameObject.tag == "Health" || other.gameObject.tag == "Item"){
+            gameObject.GetComponent<SoundManager>().BoostSound();
+        }
     }
 
     void OnCollisionEnter2D(Collision2D other) {
+        //Debug.Log(other.gameObject.name);
         if (other.gameObject.tag == "Enemy"){
             gameObject.GetComponent<Animator>().SetTrigger("Hurt");
-            energy -= 10; 
-            //print("touched enemy"); 
+            gameObject.GetComponent<SoundManager>().HurtSound();
+            energy -= 10;
+        
+            //Get direction of player
+            float heading = Mathf.Atan2(transform.right.z, transform.right.x) * Mathf.Rad2Deg;
+            if (heading == 0f) {
+                heading -= 180f;    
+            }
+            heading = heading/180; 
+            print(heading);
+            //Use direction to push player in opposite direction
+            //when in colliding with enemy. 
+            rb.AddForce(new Vector2(heading * 4f, 0),ForceMode2D.Impulse);
         }
         if (other.gameObject.tag == "Background" || other.gameObject.tag == "Obstacle" ){
             //print("touched Background"+ other.gameObject);
             gameObject.GetComponent<InputManager>().grounded = true; 
         }
+        if (other.gameObject.tag == "Spike"){
+            gameObject.GetComponent<Animator>().SetTrigger("Hurt");
+            gameObject.GetComponent<SoundManager>().HurtSound();
+            energy -= 5; 
+        }
+
+        
     }
+    
     /*
     void OnCollisionStay2D(Collision2D other) {
-        if (other.gameObject.tag == "Background" || other.gameObject.tag == "Obstacle"){
-            //print("touched Background"+ other.gameObject);
-            StartCoroutine(DelayReset());
+        if (other.gameObject.tag == "Spike"){
+            energy -= (int)0.1; 
         }
-    } */
+    } 
+    */
 
     private bool isScene(int num){
         if (gameObject.GetComponent<LevelManager>().currentSceneNumber() == num) {

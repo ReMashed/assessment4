@@ -10,6 +10,7 @@ public class EnemyManager : MonoBehaviour
     private float max;
     public float amp = 0; 
     private Vector3 vec;
+    private GameObject background; 
 
     public float health; 
     public Animator animator; 
@@ -30,24 +31,26 @@ public class EnemyManager : MonoBehaviour
         //from the middle position to get min and max. 
         min = vec.x - amp;
         max = vec.x + amp; 
+        background = GameObject.Find("BackgroundGrid");
     }
 
     // Update is called once per frame
     void Update()
     {
-        vec.x = (xPos + (float)amp*Mathf.Sin(2*Time.time));
+        vec.x = (xPos + (float)amp*Mathf.Sin(1*Time.time));
         transform.position = vec;
         //https://answers.unity.com/questions/59934/how-to-an-object-floating-up-and-down.html
         
         //checks if transform has reached peak amp
         //rotates it the other way.
-        if (vec.x >= (max - 0.2)) {
+        if (vec.x >= (max - 0.1)) {
             transform.right = new Vector3(xPos, yPos, 0.0f) - transform.position;
-        } else if (vec.x <= min + 0.2) {
+        } else if (vec.x <= min + 0.1) {
             transform.right = new Vector3(xPos, yPos, 0.0f) - transform.position;
         }
         
-        Dead(); 
+        Dead();
+        
     }
 
     /*
@@ -67,7 +70,7 @@ public class EnemyManager : MonoBehaviour
             //disable collider to prevent multiple hits detected from collision.
             enemyCollider.enabled = false; 
             StartCoroutine(colliderReset()); 
-            health -= 30; 
+            health -= 40; 
             print(health + "monster");
             print("hit");
         }
@@ -78,11 +81,10 @@ public class EnemyManager : MonoBehaviour
     public void Dead(){
         if (health <= 0) {
             animator.SetTrigger("Dead");
-            if(animator.GetCurrentAnimatorStateInfo(0).length > animator.GetCurrentAnimatorStateInfo(0).normalizedTime && !animator.IsInTransition(0)){
-                //Destroy(this.gameObject);
+            GameObject.Find("Player").GetComponent<SoundManager>().DeathSound();
+            if (transform.name == "MiniBoss") {
+                background.GetComponent<GameManager>().objCollider.enabled = false; 
             }
-           //
-           print("enemy 0 health");
         }
 
     }

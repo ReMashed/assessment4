@@ -180,7 +180,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d426fbdd858a1f648b4ee32e9c43ca72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  grounded: 0
+  doubleJumpUnlocked: 0
   speed: 3
+  originalSpeed: 0
+  originalJump: 0
   jumpHeight: 7
   rb: {fileID: 5256920575382941449}
   animator: {fileID: 5256920575382941445}
@@ -197,12 +201,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0db59746ce9a47d46ab5d393633c02d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spawn: {x: 0, y: 0, z: 0}
   energy: 101
   energyText: {fileID: 5256920574590849809}
-  instructionText: {fileID: 5256920575773484643}
+  uiText: {fileID: 0}
   speedObj: {fileID: 7767585355465191947, guid: 37d02970b118f01479acb839928326ce,
     type: 3}
+  healthObj: {fileID: 6004429014944021877, guid: bbbb690243d04bd4a8fa4edfb91d499c,
+    type: 3}
   swordCollider: {fileID: 5256920576313518463}
+  rb: {fileID: 5256920575382941449}
 --- !u!114 &5256920575382941447
 MonoBehaviour:
   m_ObjectHideFlags: 0
