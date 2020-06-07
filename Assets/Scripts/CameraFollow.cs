@@ -29,7 +29,7 @@ public class CameraFollow : MonoBehaviour
             GetComponent<UnityEngine.Camera>().orthographicSize = size;
         }
         else if (scManager.currentSceneName() == "Level2") {
-            size = 8f; 
+            size = 4f; 
             scene2 = true;
             GetComponent<UnityEngine.Camera>().orthographicSize = size;
         }
