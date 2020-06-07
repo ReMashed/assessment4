@@ -1001,7 +1001,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1059325464}
   scManager: {fileID: 1424665023}
-  size: 0
+  size: 2.687657
 --- !u!1 &1326552788
 GameObject:
   m_ObjectHideFlags: 0

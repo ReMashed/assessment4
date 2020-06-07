@@ -19,27 +19,27 @@ public class CameraFollow : MonoBehaviour
         scManager = GetComponent<LevelManager>();
         yOffset = transform.position.y - player.position.y;
         
-        if (scManager.currentSceneName() == "MainScene") {
-            size = 2.687657f;
+        if (scManager.currentSceneName() == "Tutorial") {
+            //size = 2.687657f;
             scenetut = true; 
             GetComponent<UnityEngine.Camera>().orthographicSize = size; //based on inspector value
         } else if (scManager.currentSceneName() == "Level1") {
-            size = 8f; 
+            //size = 8f; 
             scene1 = true;
             GetComponent<UnityEngine.Camera>().orthographicSize = size;
         }
         else if (scManager.currentSceneName() == "Level2") {
-            size = 4f; 
+            //size = 4f; 
             scene2 = true;
             GetComponent<UnityEngine.Camera>().orthographicSize = size;
         }
         else if (scManager.currentSceneName() == "Level3") {
-            size = 8f; 
+            //size = 8f; 
             scene3 = true;
             GetComponent<UnityEngine.Camera>().orthographicSize = size;
         }
         else if (scManager.currentSceneName() == "Level4") {
-            size = 8f; 
+            //size = 8f; 
             scene4 = true;
             GetComponent<UnityEngine.Camera>().orthographicSize = size;
         }
@@ -62,7 +62,7 @@ public class CameraFollow : MonoBehaviour
         } else if (scene3) {
             transform.position = new Vector3(player.position.x, player.position.y + yOffset , transform.position.z);
         } else if (scene4) {
-            transform.position = new Vector3(player.position.x, player.position.y + (transform.position.y - player.position.y), transform.position.z);
+            transform.position = new Vector3(player.position.x, player.position.y + yOffset , transform.position.z);
         }
        
     }

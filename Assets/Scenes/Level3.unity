@@ -981,7 +981,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 7501118783489305296}
   scManager: {fileID: 268233941}
-  size: 20
+  size: 8
 --- !u!114 &268233941
 MonoBehaviour:
   m_ObjectHideFlags: 0

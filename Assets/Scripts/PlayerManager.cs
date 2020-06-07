@@ -92,7 +92,10 @@ public class PlayerManager : MonoBehaviour
             uiText.text = "Jump over objects with the arrow using W or Up Arrow key!";
         }
         if (other.gameObject.name == "Arrow") {
-            uiText.text = "Touch the Coffee Bean to recover your Health!";
+            if(isScene(1)){
+                uiText.text = "Touch the Coffee Bean to recover your Health!";
+            }
+            
         }
         if (other.gameObject.tag == "Background" || other.gameObject.tag == "Obstacle"){
             //print("touched Background"+ other.gameObject);
@@ -111,14 +114,23 @@ public class PlayerManager : MonoBehaviour
             gameObject.GetComponent<SoundManager>().WinSound();
             Time.timeScale = 0f; //freeze time so game wont run. 
         }
+        if (other.gameObject.tag == "Health" || other.gameObject.tag == "Item"){
+            gameObject.GetComponent<SoundManager>().BoostSound();
+        }
+
+        //portal - map progression
+        if (other.gameObject.name == "Portal2") {
+            //testing.
+            uiText.text = "Is this portal real????";
+            gameObject.GetComponent<LevelManager>().DelayedLoad(3);
+        }
         if (other.gameObject.name == "HellPortal") {
             //testing.
             uiText.text = "Gateway to Hell Unlocked";
             gameObject.GetComponent<LevelManager>().DelayedLoad(0);
         }
-        if (other.gameObject.tag == "Health" || other.gameObject.tag == "Item"){
-            gameObject.GetComponent<SoundManager>().BoostSound();
-        }
+        
+        
     }
 
     void OnCollisionEnter2D(Collision2D other) {
