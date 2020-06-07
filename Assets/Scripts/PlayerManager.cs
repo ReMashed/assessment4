@@ -127,7 +127,7 @@ public class PlayerManager : MonoBehaviour
         if (other.gameObject.name == "HellPortal") {
             //testing.
             uiText.text = "Gateway to Hell Unlocked";
-            gameObject.GetComponent<LevelManager>().DelayedLoad(0);
+            gameObject.GetComponent<LevelManager>().DelayedLoad(4);
         }
         
         
