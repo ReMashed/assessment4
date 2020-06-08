@@ -12,6 +12,7 @@ TagManager:
   - Bottom
   - Spike
   - Health
+  - Speed
   layers:
   - Default
   - TransparentFX

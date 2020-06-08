@@ -46,6 +46,7 @@ public class PlayerManager : MonoBehaviour
     //script is attached to player, so whatever it touches
     void OnTriggerEnter2D(Collider2D other) { 
         //Debug.Log("touchOther");
+        //Boost Items
         if (other.gameObject.name == "HealthBoost")
         {
             if (isScene(0)){
@@ -65,7 +66,7 @@ public class PlayerManager : MonoBehaviour
             }
             //Debug.Log(energy + "Energy");
         }
-        if (other.gameObject.name == "SpeedBoost" ||other.gameObject.name == "SpeedBoost(Clone)") {
+        if (other.gameObject.name == "SpeedBoost" ||other.gameObject.name == "SpeedBoost(Clone)" || other.gameObject.tag == "Speed") {
             if (isScene(0)){
                 uiText.text = "Avoid the enemy or lose hp!";
             } 
@@ -83,8 +84,13 @@ public class PlayerManager : MonoBehaviour
             uiText.text = "Speed Increase";
             
             //other.gameObject.GetComponent<Renderer>().enabled = false; //remove object; really just rendering
-           
         }
+        if (other.gameObject.tag == "Health" || other.gameObject.tag == "Item" || other.gameObject.tag == "Speed"){
+            gameObject.GetComponent<SoundManager>().BoostSound();
+        }
+
+
+        //MSC items 
         if (other.gameObject.tag == "Bottom") {
             energy -= 100; 
         }
@@ -97,6 +103,8 @@ public class PlayerManager : MonoBehaviour
             }
             
         }
+
+        //double jump 
         if (other.gameObject.tag == "Background" || other.gameObject.tag == "Obstacle"){
             //print("touched Background"+ other.gameObject);
             gameObject.GetComponent<InputManager>().grounded = true; 
@@ -107,30 +115,32 @@ public class PlayerManager : MonoBehaviour
             StartCoroutine(ResetText());
             Destroy(other.gameObject); 
         }
+
+        //portal - map progression
+        if (other.gameObject.name == "Portal1") {
+            //testing.
+            uiText.text = "Going Under....";
+            gameObject.GetComponent<LevelManager>().DelayedLoad(3);
+        }
+        if (other.gameObject.name == "Portal2") {
+            //testing.
+            uiText.text = "Is this portal real????";
+            gameObject.GetComponent<LevelManager>().DelayedLoad(4);
+        }
+        if (other.gameObject.name == "HellPortal") {
+            //testing.
+            uiText.text = "Gateway to Hell Unlocked";
+            gameObject.GetComponent<LevelManager>().DelayedLoad(5);
+        }
+
+        //Game end
         if (other.gameObject.name == "CoffeeCup") {
             //change this to load next level
             //via a couroutine 
             uiText.text = "You win! \n Press ESC to exit";
             gameObject.GetComponent<SoundManager>().WinSound();
             Time.timeScale = 0f; //freeze time so game wont run. 
-        }
-        if (other.gameObject.tag == "Health" || other.gameObject.tag == "Item"){
-            gameObject.GetComponent<SoundManager>().BoostSound();
-        }
-
-        //portal - map progression
-        if (other.gameObject.name == "Portal2") {
-            //testing.
-            uiText.text = "Is this portal real????";
-            gameObject.GetComponent<LevelManager>().DelayedLoad(3);
-        }
-        if (other.gameObject.name == "HellPortal") {
-            //testing.
-            uiText.text = "Gateway to Hell Unlocked";
-            gameObject.GetComponent<LevelManager>().DelayedLoad(4);
-        }
-        
-        
+        }   
     }
 
     void OnCollisionEnter2D(Collision2D other) {

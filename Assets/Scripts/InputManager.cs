@@ -29,7 +29,10 @@ public class InputManager : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>(); 
         scManager = GetComponent<LevelManager>();
-        Time.timeScale = 0.0f; 
+        if(scManager.currentSceneNumber() == 1){
+            Time.timeScale = 0.0f; 
+        }
+        
         
     }
 
