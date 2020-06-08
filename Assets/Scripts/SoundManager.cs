@@ -46,7 +46,8 @@ public class SoundManager : MonoBehaviour
     }
     public void WalkSound(){
         aSource.clip = walkClip;
-        aSource.PlayOneShot(walkClip, 0.3f);
+        aSource.Play();
+        //aSource.PlayOneShot(walkClip, 0.3f);
     }
 
     
